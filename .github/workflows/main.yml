@@ -2,7 +2,7 @@ name: Get Feed
 
 on:
   schedule:
-    - cron: '30 12 * * *' # Runs daily at 12:30 UTC
+    - cron: '30 12 * * *' # 6pm IST
   workflow_dispatch:
 
 jobs:
@@ -14,27 +14,12 @@ jobs:
       NOTION_FEEDS_DATABASE_ID: ${{ secrets.NOTION_FEEDS_DATABASE_ID }}
       RUN_FREQUENCY: 86400 # in seconds
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          fetch-depth: 1
+          node-version: 14
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Fetch and Run Notion Feed Script
+      - name: Update Notion Feed
         run: |
           curl -o index.js https://raw.githubusercontent.com/ravgeetdhillon/notion-feeder/build/dist/index.js
           node index.js
-
-      # Upload the workflow logs or any generated files as an artifact
-      - name: Upload Logs as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs
-          path: ./logs # Ensure this path exists; you might need to specify an actual log/output file path
