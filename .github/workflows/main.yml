@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -23,15 +25,16 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Validate Environment Variables
+        run: |
+          if [ -z "$NOTION_API_TOKEN" ] || [ -z "$NOTION_READER_DATABASE_ID" ] || [ -z "$NOTION_FEEDS_DATABASE_ID" ]; then
+            echo "Error: Missing required environment variables."
+            exit 1
+          fi
 
       - name: Fetch and Run Notion Feed Script
         run: |
           curl -o index.js https://raw.githubusercontent.com/ravgeetdhillon/notion-feeder/build/dist/index.js
-          node index.js
-
-      - name: Upload Logs as Artifact
-        uses: actions/upload-artifact@v3 # Updated to v3
-        with:
-          name: logs
-          path: ./logs
+          node index.js || (echo "Error: Failed to execute the Notion Feed script" && exit 1)
