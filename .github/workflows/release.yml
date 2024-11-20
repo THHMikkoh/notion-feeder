@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3 # Updated to v3
         with:
-          node-version: 20 # Use the latest supported version of Node.js
+          node-version: 20 # Updated to latest Node.js version
 
       - name: Cache NPM Dependencies
         id: cache-npm-dependencies
