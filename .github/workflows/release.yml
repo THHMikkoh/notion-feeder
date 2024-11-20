@@ -37,30 +37,9 @@ jobs:
         run: |
           npm run build-prod
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: dist
-          path: dist
-
-  commit-build:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Repository
-        uses: actions/checkout@v2
-        with:
-          ref: build
-
-      - name: Download Build
-        uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-
-      - name: Commit and Push
+      - name: Commit and Push Build
         run: |
-          if [ $(git status dist --porcelain=v1 2>/dev/null | wc -l) != "0" ] ; then
+          if [ $(git status dist --porcelain=v1 2>/dev/null | wc -l) != "0" ]; then
             git config user.name "GitHub Actions"
             git config user.email noreply@github.com
             git add dist
