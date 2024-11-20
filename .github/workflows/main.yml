@@ -15,15 +15,15 @@ jobs:
       RUN_FREQUENCY: 86400 # in seconds
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3 # Updated to latest version
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # Updated to latest version
         with:
           node-version: 20
 
       - name: Cache Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v3 # Updated to latest version
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
