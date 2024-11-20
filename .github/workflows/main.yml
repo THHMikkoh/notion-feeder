@@ -15,14 +15,14 @@ jobs:
       RUN_FREQUENCY: 86400 # in seconds
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3 # Latest version of checkout action
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3 # Latest version of setup-node action
+        uses: actions/setup-node@v3
         with:
-          node-version: 20 # Explicitly set Node.js version
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install
@@ -32,9 +32,9 @@ jobs:
           curl -o index.js https://raw.githubusercontent.com/ravgeetdhillon/notion-feeder/build/dist/index.js
           node index.js
 
-      # Optional: If there is an upload-artifact step, replace it like this:
-      - name: Upload Logs or Artifacts (Optional)
-        uses: actions/upload-artifact@v3 # Update to v3
+      # Upload the workflow logs or any generated files as an artifact
+      - name: Upload Logs as Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: logs
-          path: ./logs
+          path: ./logs # Ensure this path exists; you might need to specify an actual log/output file path
