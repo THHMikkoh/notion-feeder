@@ -14,23 +14,27 @@ jobs:
       NOTION_FEEDS_DATABASE_ID: ${{ secrets.NOTION_FEEDS_DATABASE_ID }}
       RUN_FREQUENCY: 86400 # in seconds
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3 # Updated to latest version
+      - name: Checkout repository
+        uses: actions/checkout@v3 # Latest version of checkout action
+        with:
+          fetch-depth: 1
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3 # Updated to latest version
+        uses: actions/setup-node@v3 # Latest version of setup-node action
         with:
-          node-version: 20
+          node-version: 20 # Explicitly set Node.js version
 
-      - name: Cache Dependencies
-        uses: actions/cache@v3 # Updated to latest version
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Update Notion Feed
+      - name: Fetch and Run Notion Feed Script
         run: |
           curl -o index.js https://raw.githubusercontent.com/ravgeetdhillon/notion-feeder/build/dist/index.js
           node index.js
+
+      # Optional: If there is an upload-artifact step, replace it like this:
+      - name: Upload Logs or Artifacts (Optional)
+        uses: actions/upload-artifact@v3 # Update to v3
+        with:
+          name: logs
+          path: ./logs
